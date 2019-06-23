@@ -57,12 +57,17 @@ namespace DellChallenge.D1.Api.Dal
             Task.Run(() =>
             {
                 var product = _context.Products.Where(p => p.Id == id).FirstOrDefault();
-                if (product == null)
+                if (product != null)
+                {
+                    _context.Products.Remove(product);
+                    _context.SaveChanges();
+                    tcs.SetResult(true);
+                }
+                else
+                {
                     tcs.SetResult(false);
+                }
 
-                _context.Products.Remove(product);
-                _context.SaveChanges();
-                tcs.SetResult(true);
             });
 
             return tcs.Task;
@@ -74,13 +79,17 @@ namespace DellChallenge.D1.Api.Dal
             Task.Run(() =>
             {
                 var product = _context.Products.Where(p => p.Id == id).FirstOrDefault();
-                if (product == null)
+                if (product != null)
+                {
+                    product.Name = updatedProduct.Name;
+                    product.Category = updatedProduct.Category;
+                    _context.SaveChanges();
+                    tcs.SetResult(true);
+                }
+                else
+                {
                     tcs.SetResult(false);
-
-                product.Name = updatedProduct.Name;
-                product.Category = updatedProduct.Category;
-                _context.SaveChanges();
-                tcs.SetResult(true);
+                }
             });
 
             return tcs.Task;
