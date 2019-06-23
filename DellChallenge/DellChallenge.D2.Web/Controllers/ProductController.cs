@@ -1,6 +1,7 @@
 ﻿using DellChallenge.D2.Web.Models;
 using DellChallenge.D2.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace DellChallenge.D2.Web.Controllers
 {
@@ -14,9 +15,9 @@ namespace DellChallenge.D2.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var model = _productService.GetAll();
+            var model = await _productService.GetAll();
             return View(model);
         }
 
@@ -26,10 +27,43 @@ namespace DellChallenge.D2.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Add(NewProductModel newProduct)
+        [HttpGet]
+        public async Task<IActionResult> Update(string id)
         {
-            _productService.Add(newProduct);
+            var model = await _productService.GetById(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(NewProductModel newProduct)
+        {
+            if (!ModelState.IsValid)
+                return View(newProduct);
+
+            await _productService.Add(newProduct);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _productService.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(ProductModel updatedProduct)
+        {
+            if (!ModelState.IsValid)
+                return View(updatedProduct);
+
+            var id = updatedProduct.Id;
+            var productDetails = new NewProductModel()
+            {
+                Category = updatedProduct.Category,
+                Name = updatedProduct.Name
+            };
+            await _productService.Update(id, productDetails);
             return RedirectToAction("Index");
         }
     }
