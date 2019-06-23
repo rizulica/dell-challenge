@@ -3,6 +3,7 @@ using DellChallenge.D1.Api.Dto;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DellChallenge.D1.Api.Controllers
 {
@@ -19,36 +20,46 @@ namespace DellChallenge.D1.Api.Controllers
 
         [HttpGet]
         [EnableCors("AllowReactCors")]
-        public ActionResult<IEnumerable<ProductDto>> Get()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
         {
-            return Ok(_productsService.GetAll());
+            return Ok(await _productsService.GetAll());
         }
 
         [HttpGet("{id}")]
         [EnableCors("AllowReactCors")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<string>> Get(string id)
         {
-            return "value";
+            return Ok(await _productsService.GetByID(id));
         }
 
         [HttpPost]
         [EnableCors("AllowReactCors")]
-        public ActionResult<ProductDto> Post([FromBody] NewProductDto newProduct)
+        public async Task<ActionResult<ProductDto>> Post([FromBody] NewProductDto newProduct)
         {
-            var addedProduct = _productsService.Add(newProduct);
+            var addedProduct = await _productsService.Add(newProduct);
             return Ok(addedProduct);
         }
 
         [HttpDelete("{id}")]
         [EnableCors("AllowReactCors")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
+            var result = await _productsService.Delete(id);
+            if (result)
+                return Ok();
+            else
+                return BadRequest("The product specified does not exist!");
         }
 
         [HttpPut("{id}")]
         [EnableCors("AllowReactCors")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(string id, [FromBody] NewProductDto updatedProduct)
         {
+            var result = await _productsService.Update(id, updatedProduct);
+            if (result)
+                return Ok();
+            else
+                return BadRequest("The product specified does not exist!");
         }
     }
 }
