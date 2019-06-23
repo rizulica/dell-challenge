@@ -23,7 +23,7 @@ class EditProduct extends Component {
   
   componentDidMount() {
 	  const { id } = this.props.match.params;
-      fetch("http://localhost:2534/api/products/" + id)
+      fetch("http://localhost:5000/api/products/" + id)
       .then(
         result => {
           this.setState({
@@ -43,7 +43,7 @@ class EditProduct extends Component {
 		  Category: this.state.Category
 		};
 
-		fetch("http://localhost:2534/api/products/" + id, {
+		fetch("http://localhost:5000/api/products/" + id, {
 		  method: "PUT",
 		  headers: {
 			Accept: "application/json",

@@ -12,7 +12,7 @@ class ProductList extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:2534/api/products")
+    fetch("http://localhost:5000/api/products")
       .then(res => res.json())
       .then(
         result => {
@@ -34,7 +34,7 @@ class ProductList extends React.Component {
   }
 
 	editItem = productId => {
-	  fetch("http://localhost:2534/api/products/" + productId)
+	  fetch("http://localhost:5000/api/products/" + productId)
       .then(res => res.json())
       .then(
         result => {
@@ -51,7 +51,7 @@ class ProductList extends React.Component {
 		method: 'DELETE'
 	  };
 
-	  fetch("http://localhost:2534/api/products/" + productId, requestOptions).then(() => {
+	  fetch("http://localhost:5000/api/products/" + productId, requestOptions).then(() => {
 		window.location.reload();
 	  });
 	}

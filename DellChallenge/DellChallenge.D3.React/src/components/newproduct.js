@@ -20,7 +20,7 @@ class NewProduct extends Component {
 		  Category: this.state.Category
 		};
 
-		fetch("http://localhost:2534/api/products", {
+		fetch("http://localhost:5000/api/products", {
 		  method: "POST",
 		  headers: {
 			Accept: "application/json",
