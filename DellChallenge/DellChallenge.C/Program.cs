@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DellChallenge.C
 {
@@ -10,30 +11,25 @@ namespace DellChallenge.C
             //      1. clean coding
             //      2. naming standards
             //      3. code reusability, hence maintainability
-            StartHere();
+            CalculateSums();
             Console.ReadKey();
         }
 
-        private static void StartHere()
+        private static void CalculateSums()
         {
-            myObject _MyNewObject = new myObject();
-            int obj1 = _MyNewObject.Do(1, 3);
-            int num2 = _MyNewObject.DoExtended(1, 3, 5);
-            Console.WriteLine(obj1);
-            Console.WriteLine(num2);
+            var sum = SumCalculator.CalculateSum(new int[] { 1, 3 });
+            var extendedSum = SumCalculator.CalculateSum(new int[] { 1, 3, 5 });
+
+            Console.WriteLine(sum);
+            Console.WriteLine(extendedSum);
         }
     }
 
-    class myObject
+    static class SumCalculator
     {
-
-        public int Do(int a, int b)
+        public static int CalculateSum(int[] numbers)
         {
-            return a + b;
-        }
-
-        public int DoExtended(int a, int b, int c)
-        { return a + b + c;
+            return numbers.Sum();
         }
     }
 }
